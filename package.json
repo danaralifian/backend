@@ -1,0 +1,30 @@
+{
+  "name": "postgres",
+  "version": "1.0.0",
+  "description": "backend server with postgres sb\u001b[\u001b[3~\u001b[3~\u001b[3~\u001b[C\u001b[C\u001b[Dd\u001b[D\u001bdb",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danaralifian/backend.git"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "Danar Alifian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danaralifian/backend/issues"
+  },
+  "homepage": "https://github.com/danaralifian/backend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "node-uuid": "^1.4.8",
+    "nodemon": "^2.0.4",
+    "server": "^1.0.30"
+  }
+}
