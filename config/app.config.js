@@ -1,6 +1,6 @@
 module.exports = {
-    db_uri: "",
+    db_uri: "MONGODB",
     jwtSecret : 'news_api',
-    api_key : 'a2d699e8b5443ba96949b35fe52be4af',
+    api_key : 'API_KEY_TMDB',
     BASE_URL : 'https://api.themoviedb.org/3'
 }
