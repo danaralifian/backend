@@ -12,7 +12,7 @@ module.exports = function (app) {
     ]);
 
     app.get('/users', [
-        // ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.validJWTNeeded,
         UsersController.list
     ]);
 

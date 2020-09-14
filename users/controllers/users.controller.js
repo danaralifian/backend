@@ -4,13 +4,11 @@ const md5 = require('md5')
 //create user
 exports.insert = (req, res) => {
     let date = new Date()
-    // let passwordMd5 = md5(req.body.password)
-    // req.body.password = passwordMd5
-    req.body.permissionLevel = 1
+    req.body.permissionLevel = 2
     req.body.createdAt = date.toISOString()
     UserModel.createUser(req.body)
         .then((result) => {
-            res.status(200).send({id: result._id});
+            res.status(200).send({id: result.email});
         })
         .catch((err)=>{
             res.status(400).send(err)
@@ -65,7 +63,7 @@ exports.patchById = (req, res) => {
  };
 
  exports.search = (req, res)=>{
-     UserModel.searchUser(req.body)
+     UserModel.searchUser(req.body.name)
      .then((result)=>{
         res.status(200).send(result)
      })

@@ -1,6 +1,6 @@
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
-const cryptyoJs = require('crypto-js')
+const {v4: uuidv4} = require('uuid')
 const UserModel = require('../../users/models/users.model')
 const config = require('../../config/app.config')
 
@@ -29,9 +29,9 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
 };
 
 exports.login = (req, res) => {
-    try {
-        let token = jwt.sign(req.body, config.jwtSecret);
-        let refresh_token = jwt.sign(req.body, config.jwtSecret)
+    try {   
+        let token = jwt.sign(req.body, config.jwtSecret, {expiresIn : '7d'})
+        let refresh_token = uuidv4()
         let body = Object.assign(req.body)
         body.accessToken = token
         body.refreshToken = refresh_token
@@ -40,3 +40,19 @@ exports.login = (req, res) => {
         res.status(500).send({errors: err});
     }
  };
+
+
+exports.userInfo=(req)=>{
+    return new Promise((resolve, reject)=>{
+        if (req.headers && req.headers.authorization) {
+            let authorization = req.headers['authorization'].split(' '),
+                decoded;
+            try {
+                decoded = jwt.verify(authorization[1], config.jwtSecret);
+            } catch (e) {
+                reject(e)
+            }
+            resolve(decoded)
+        }
+    })
+}

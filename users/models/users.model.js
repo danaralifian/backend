@@ -4,8 +4,8 @@ const mongoosePaginate = require('mongoose-paginate');
 const _ = require('lodash');
 
 const userSchema = new Schema({
-    firstName: {type : String, required : true},
-    lastName: {type : String, required : true},
+    firstName: {type : String, required : false},
+    lastName: {type : String, required : false},
     email: {type : String, required : true, unique : true},
     password: {type : String, required : true},
     permissionLevel: {type : Number, required : true},
@@ -91,14 +91,14 @@ exports.patchUser = (id, userData) => {
     })
 };
 
-//search user = (dataFilters)
-exports.searchUser=(dataFilters)=>{
+//search user by email
+exports.searchUser=(email)=>{
     return new Promise((resolve, reject)=>{
         userModel.find(
             {
                 $or : [
                     {
-                        email: { $regex: /^dan/i }
+                        email: { $regex: email.toLowerCase() }
                     }
                 ]
             }
