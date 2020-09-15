@@ -8,7 +8,7 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
     UserModel.findByEmail(req.body.email)
         .then((user)=>{
             if(!user){
-                res.status(403).send({message : 'Invalid email'});
+                res.status(400).send({message : 'Email tidak terdaftar'});
             }else{
                 let passwordMd5 = req.body.password
                 let passwordFields = user.password
@@ -22,7 +22,7 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
                     };
                     return next();
                 } else {
-                    return res.status(400).send({errors: ['Invalid email or password']});
+                    return res.status(400).send({message : 'Kata sandi salah'});
                 }
             }
         });

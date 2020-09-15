@@ -15,7 +15,7 @@ exports.validJWTNeeded = (req, res, next) => {
             return res.status(401).send({message : `you're unathorized`});
         }
     } else {
-        return res.status(401).send();
+        return res.status(401).send({message : `you're unathorized`});
     }
 };
 
