@@ -10,18 +10,19 @@ const categorySchema = new Schema({
     createdAt : {type : Date, required : Date.now()},
 });
 
-const CategoryModel = mongoose.model('Categories', categorySchema);
+const Model = mongoose.model('categories', categorySchema);
+exports.categoryModel = Model
 
 //create category
 exports.createCategory = (categorySchema) => {
-    const category = new CategoryModel(categorySchema);
+    const category = new Model(categorySchema);
     return category.save();
 };
 
 //find category by email
 exports.findByEmail = (email) => {
     return new Promise((resolve, reject) => {
-        CategoryModel.findOne({email : email})
+        Model.findOne({email : email})
             .exec(function (err, result) {
                 if (err) {
                     reject(err);
@@ -34,7 +35,7 @@ exports.findByEmail = (email) => {
 
 //get category by id
 exports.findById = (id) => {
-    return CategoryModel.findById(id).then((result) => {
+    return Model.findById(id).then((result) => {
         result = result.toJSON();
         delete result._id;
         delete result.__v;
@@ -45,7 +46,7 @@ exports.findById = (id) => {
 //get all cateories
 exports.list = (perPage, page) => {
     return new Promise((resolve, reject) => {
-        CategoryModel.find()
+        Model.find()
             .limit(perPage)
             .skip(perPage * page)
             .exec(function (err, categories) {
@@ -61,7 +62,7 @@ exports.list = (perPage, page) => {
 //remove category
 exports.removeById = (categoryId) => {
     return new Promise((resolve, reject) => {
-        CategoryModel.deleteOne({_id: categoryId}, (err) => {
+        Model.deleteOne({_id: categoryId}, (err) => {
             if (err) {
                 reject(err);
                 console.log(err)
@@ -74,9 +75,9 @@ exports.removeById = (categoryId) => {
 
 //update category
 exports.patchCategory = (id, categoryData) => {
-    const category = new CategoryModel(categoryData);
+    const category = new Model(categoryData);
     return new Promise((resolve, reject) => {
-        CategoryModel.findById(id, function (err, category) {
+        Model.findById(id, function (err, category) {
             if (err) reject(err);
             for (let i in categoryData) {
                 category[i] = categoryData[i];
@@ -92,7 +93,7 @@ exports.patchCategory = (id, categoryData) => {
 //search category = (dataFilters)
 exports.searchCategory=(dataFilters)=>{
     return new Promise((resolve, reject)=>{
-        CategoryModel.find(
+        Model.find(
             {
                 $or : [
                     {

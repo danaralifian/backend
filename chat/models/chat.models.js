@@ -10,7 +10,8 @@ const chatScheme = new Schema({
     type : {type : String, required : false, default : 'personal'}
 })
 
-const Model = mongoose.model('Chat', chatScheme);
+const Model = mongoose.model('chats', chatScheme);
+exports.chatModel = Model;
 
 //create user
 exports.create = (payload) => {

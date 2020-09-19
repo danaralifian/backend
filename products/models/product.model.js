@@ -14,18 +14,19 @@ const productSchema = new Schema({
     categoryId : {type : String, required : true},
 });
 
-const ProductModel = mongoose.model('Products', productSchema);
+const Model = mongoose.model('products', productSchema);
+exports.productModel = Model;
 
 //create product
 exports.createModel = (productSchema) => {
-    const product = new ProductModel(productSchema);
+    const product = new Model(productSchema);
     return product.save();
 };
 
 //find product by email
 exports.findByEmail = (email) => {
     return new Promise((resolve, reject) => {
-        ProductModel.findOne({email : email})
+        Model.findOne({email : email})
             .exec(function (err, result) {
                 if (err) {
                     reject(err);
@@ -38,7 +39,7 @@ exports.findByEmail = (email) => {
 
 //get product by id
 exports.findById = (id) => {
-    return ProductModel.findById(id).then((result) => {
+    return Model.findById(id).then((result) => {
         result = result.toJSON();
         delete result._id;
         delete result.__v;
@@ -49,7 +50,7 @@ exports.findById = (id) => {
 //get all cateories
 exports.list = (perPage, page) => {
     return new Promise((resolve, reject) => {
-        ProductModel.find()
+        Model.find()
             .limit(perPage)
             .skip(perPage * page)
             .exec(function (err, products) {
@@ -65,7 +66,7 @@ exports.list = (perPage, page) => {
 //remove product
 exports.removeById = (productId) => {
     return new Promise((resolve, reject) => {
-        ProductModel.deleteOne({_id: productId}, (err) => {
+        Model.deleteOne({_id: productId}, (err) => {
             if (err) {
                 reject(err);
                 console.log(err)
@@ -78,9 +79,9 @@ exports.removeById = (productId) => {
 
 //update product
 exports.patchProduct = (id, productData) => {
-    const product = new ProductModel(productData);
+    const product = new Model(productData);
     return new Promise((resolve, reject) => {
-        ProductModel.findById(id, function (err, product) {
+        Model.findById(id, function (err, product) {
             if (err) reject(err);
             for (let i in productData) {
                 product[i] = productData[i];
@@ -96,7 +97,7 @@ exports.patchProduct = (id, productData) => {
 //search product = (dataFilters)
 exports.searchProduct=(dataFilters)=>{
     return new Promise((resolve, reject)=>{
-        ProductModel.find(
+        Model.find(
             {
                 $or : [
                     {

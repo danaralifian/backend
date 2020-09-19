@@ -10,9 +10,11 @@ const config = require('./config/app.config')
 //routes
 const route = require('./routes/routes.config')
 const authRoute = require('./authorization/authorization.route.config')
-
 //test routes
 const testRoutes = require('./test/routes.test')
+
+//init models
+const ChatModel = require('./chat/models/chat.models')
 
 express.static(path.join(__dirname, '/'))
 // Create Express app
@@ -21,8 +23,7 @@ app.use(cors())
 app.use(express.urlencoded({extended : true}))
 app.use(express.json())
 
-//CONFIGURATION  MONGODB
-//source uri database
+//CONFIGURATION  MONGODB ===> source uri database
 const uri = config.db_uri
 // make connection
 mongoose.connect(uri, {
@@ -33,6 +34,18 @@ mongoose.connect(uri, {
     console.log('MongoDB Connected…')
 })
 .catch(err => console.log(err))
+
+//connection for pusher
+const db = mongoose.connection;
+
+db.once("open", ()=>{
+  console.log('stream connected')
+  const chatCollection = db.collection('chats')
+  const changeStream = chatCollection.watch()
+  changeStream.on("change", (change)=>{
+    console.log(change)
+  })
+})
 
 //adding route 
 authRoute(app)

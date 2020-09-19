@@ -3,29 +3,25 @@ const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
 const _ = require('lodash');
 
-const userSchema = new Schema({
-    firstName: {type : String, required : false},
-    lastName: {type : String, required : false},
-    email: {type : String, required : true, unique : true},
-    password: {type : String, required : true},
-    permissionLevel: {type : Number, required : true},
+const categorySchema = new Schema({
+    name: {type : String, required : true},
+    description : {type : String, required : false},
+    thumbnail : {type : String, required : false},
     createdAt : {type : Date, required : Date.now()},
-    timeLogin : {type : Date, default : Date.now()}
 });
 
-const Model = mongoose.model('users', userSchema);
-exports.userModel = Model;
+const CategoryModel = mongoose.model('Categories', categorySchema);
 
-//create user
-exports.createUser = (userData) => {
-    const user = new Model(userData);
-    return user.save();
+//create category
+exports.createCategory = (categorySchema) => {
+    const category = new CategoryModel(categorySchema);
+    return category.save();
 };
 
-//find user by email
+//find category by email
 exports.findByEmail = (email) => {
     return new Promise((resolve, reject) => {
-        Model.findOne({email : email})
+        CategoryModel.findOne({email : email})
             .exec(function (err, result) {
                 if (err) {
                     reject(err);
@@ -36,9 +32,9 @@ exports.findByEmail = (email) => {
     });
 };
 
-//get user by id
+//get category by id
 exports.findById = (id) => {
-    return Model.findById(id).then((result) => {
+    return CategoryModel.findById(id).then((result) => {
         result = result.toJSON();
         delete result._id;
         delete result.__v;
@@ -46,28 +42,29 @@ exports.findById = (id) => {
     });
 };
 
-//get all users
+//get all cateories
 exports.list = (perPage, page) => {
     return new Promise((resolve, reject) => {
-        Model.find()
+        CategoryModel.find()
             .limit(perPage)
             .skip(perPage * page)
-            .exec(function (err, users) {
+            .exec(function (err, categories) {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(users);
+                    resolve(categories);
                 }
             })
     });
 };
 
-//remove user
-exports.removeById = (userId) => {
+//remove category
+exports.removeById = (categoryId) => {
     return new Promise((resolve, reject) => {
-        Model.remove({_id: userId}, (err) => {
+        CategoryModel.deleteOne({_id: categoryId}, (err) => {
             if (err) {
                 reject(err);
+                console.log(err)
             } else {
                 resolve(err);
             }
@@ -75,31 +72,31 @@ exports.removeById = (userId) => {
     });
 };
 
-//update user
-exports.patchUser = (id, userData) => {
-    const user = new Model(userData);
+//update category
+exports.patchCategory = (id, categoryData) => {
+    const category = new CategoryModel(categoryData);
     return new Promise((resolve, reject) => {
-        Model.findById(id, function (err, user) {
+        CategoryModel.findById(id, function (err, category) {
             if (err) reject(err);
-            for (let i in userData) {
-                user[i] = userData[i];
+            for (let i in categoryData) {
+                category[i] = categoryData[i];
             }
-            user.save(function (err, updatedUser) {
+            category.save(function (err, updatedCategory) {
                 if (err) return reject(err);
-                resolve(updatedUser);
+                resolve(updatedCategory);
             });
         });
     })
 };
 
-//search user by email
-exports.searchUser=(email)=>{
+//search category = (dataFilters)
+exports.searchCategory=(dataFilters)=>{
     return new Promise((resolve, reject)=>{
-        Model.find(
+        CategoryModel.find(
             {
                 $or : [
                     {
-                        email: { $regex: email.toLowerCase() }
+                        name: { $regex: /^dan/i }
                     }
                 ]
             }
