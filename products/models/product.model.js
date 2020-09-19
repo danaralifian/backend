@@ -9,7 +9,7 @@ const productSchema = new Schema({
     description : {type : String, required : true, default : ''},
     thumbnail : {type : String, required : true},
     createdAt : {type : Date, required : Date.now()},
-    price : {type : Decimal128 , required : true},
+    price : {type : Number , required : true},
     isActive : {type : Boolean, default : false},
     categoryId : {type : String, required : true},
 });

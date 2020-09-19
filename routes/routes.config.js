@@ -4,6 +4,7 @@ const productRoutes = require('../products/routes/products.routes')
 const trendingsRoute = require('../trendings/routes/trendings.routes')
 const moviesRoute = require('../movies/routes/movies.routes')
 const shopRoute = require('../shop/routes/shop.routes')
+const chatRoute = require('../chat/routes/chat.routes')
 
 module.exports = function (app) {
 
@@ -18,4 +19,5 @@ module.exports = function (app) {
     trendingsRoute(app);
     moviesRoute(app);
     shopRoute(app);
+    chatRoute(app);
 }
