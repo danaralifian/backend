@@ -9,7 +9,7 @@ const pusher = new Pusher({
     key : "key",
     secret : "secret",
     cluster : "cluster",
-    encrypted : true
+    useTLS : true
 })
 
 module.exports = {

@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 
 const config = require('./config/app.config')
+const { pusher } = require('./config/app.config')
 
 //routes
 const route = require('./routes/routes.config')
@@ -22,6 +23,11 @@ const app = express()
 app.use(cors())
 app.use(express.urlencoded({extended : true}))
 app.use(express.json())
+app.use((req, res, next)=>{
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Headers", "*")
+  next()
+})
 
 //CONFIGURATION  MONGODB ===> source uri database
 const uri = config.db_uri
@@ -44,6 +50,13 @@ db.once("open", ()=>{
   const changeStream = chatCollection.watch()
   changeStream.on("change", (change)=>{
     console.log(change)
+    if(change.operationType === 'insert'){
+      const msgDetails = change.fullDocument;
+      // messages ==> is channel
+      pusher.trigger('messages', 'inserted', msgDetails)
+    }else{
+      console.log('Err trigger pusher')
+    }
   })
 })
 
