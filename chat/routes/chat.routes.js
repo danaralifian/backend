@@ -7,7 +7,7 @@ module.exports = function (app) {
         ChatController.insert
     ]);
 
-    app.get('/chat',[
+    app.get('/chats',[
         ValidationMiddleware.validJWTNeeded,
         ChatController.list
     ])

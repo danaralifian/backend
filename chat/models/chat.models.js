@@ -7,7 +7,8 @@ const chatScheme = new Schema({
     createAt : {type : Date, default : Date.now()},
     message : {type : String, required : true},
     attachments : {type : Array, required : false, default : [] },
-    type : {type : String, required : false, default : 'personal'}
+    type : {type : String, required : false, default : 'personal'},
+    received : {type : Boolean, required : true, default : false}
 })
 
 const Model = mongoose.model('chats', chatScheme);
