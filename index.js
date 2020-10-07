@@ -80,7 +80,7 @@ db.once("open", ()=>{
 
 //init socket io
 io.on('connection', (socket) =>{
-  socketEvents(socket)
+  socketEvents(socket, io)
 }) 
 
 //adding route 
