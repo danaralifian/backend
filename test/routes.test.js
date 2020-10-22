@@ -19,4 +19,8 @@ module.exports = function(app){
     app.post('/test/find_token_user', [
         TestController.findUserByToken
     ]);
+
+    app.post('test/graphql', [
+        TestController.graphql
+    ])
 }

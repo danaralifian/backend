@@ -1,19 +1,18 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const contentChatScheme = new Schema({
-    senderId : {type : String, required : true},
-    roomId : {type : String, required : true},
+const roomScheme = new Schema({
+    name : {type : String, required : true},
+    attachment : {type : String, default: "", required : false},
     createdAt : {type : Date, default : Date.now()},
-    message : {type : String, required : true},
-    attachments : {type : Array, required : false, default : [] },
-    read : {type : Boolean, required : false, default : false}
+    personal : {type : Boolean, required : false, default : false},
+    creatorId : {type : mongoose.Types.ObjectId, required : true}
 })
 
-const Model = mongoose.model('content_chats', contentChatScheme);
-exports.contentChatScheme = Model;
+const Model = mongoose.model('rooms', roomScheme);
+exports.roomModel = Model;
 
-//create user
+//create
 exports.create = (payload) => {
     const model = new Model(payload);
     return model.save();
@@ -35,7 +34,7 @@ exports.list = (perPage, page) => {
     });
 };
 
-//remove user
+//remove id
 exports.removeById = (id) => {
     return new Promise((resolve, reject) => {
         Model.remove({_id: id}, (err) => {

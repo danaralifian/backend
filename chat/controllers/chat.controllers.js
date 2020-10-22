@@ -1,20 +1,13 @@
 const Model = require('../models/chat.models')
-const verifyUser = require('../../authorization/middlewares/verify.user.middleware')
 
 exports.insert = (req, res) => {
-    verifyUser.userInfo(req)
-    .then(find=>{
-        req.body.senderId = find.userId
-        Model.create(req.body)
-        .then((result) => {
-            res.status(200).send(result);
-        })
-        .catch((err)=>{
-            res.status(400).send(err)
-        })
+    req.body.senderId = req.jwt.userId
+    Model.create(req.body)
+    .then((result) => {
+        res.status(200).send(result);
     })
-    .catch(err=>{
-        res.status(402).send({msg : 'You are unauthorize'})
+    .catch((err)=>{
+        res.status(400).send(err)
     })
 };
 
@@ -30,11 +23,8 @@ exports.list = (req, res) => {
         }
     }
 
-    verifyUser.userInfo(req)
-    .then(find=>{
-        let receiverId = find.userId
-        Model.list(limit, page, offset, receiverId).then((result) => {
-            res.status(200).send({records : result});
-        })
+    let receiverId = req.jwt.userId
+    Model.list(limit, page, offset, receiverId).then((result) => {
+        res.status(200).send({records : result});
     })
 };
